@@ -1,32 +1,52 @@
-import { HiOutlineMail } from 'react-icons/hi';
+import { AiOutlineMail, AiOutlineReload } from 'react-icons/ai';
 import { RiLockPasswordLine } from 'react-icons/ri';
+
 import Input from '../login/Input';
+
 import { UseRegister } from '../../context/useRegisterContext';
-import React, { useState } from 'react';
+import React from 'react';
 import postLogin from '../../api/postLogin';
-import { AiOutlineReload } from 'react-icons/ai';
+
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+type IFormInput = {
+  email: string;
+  password: string;
+};
+
+const schema = z.object({
+  email: z.string().email('insira um email valido'),
+  password: z
+    .string()
+    .min(8, { message: 'Deve conter no minimo 8 caracteres' }),
+});
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>({ resolver: zodResolver(schema) });
+
   const { openRegister, setOpenRegister } = UseRegister();
+
   const { login, load, error } = postLogin();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const onSubmit: SubmitHandler<IFormInput> = async ({ email, password }) =>
+    await login({ email, password });
+  console.log(errors);
 
   function handleRegister(event: React.MouseEvent) {
     event.preventDefault();
     setOpenRegister(!openRegister);
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    await login({ email, password });
-  }
-
   return (
     <form
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className={`${
         openRegister ? 'hidden' : ''
       }  flex items-center bg-[#101010] rounded-md`}
@@ -40,20 +60,18 @@ const Login = () => {
 
         <p className="text-violet-800">Entre na sua conta</p>
         <Input
-          icon={<HiOutlineMail color="black" />}
-          type="text"
-          placeholder="Email"
-          error={error}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          label="Email"
+          icon={<AiOutlineMail color="black" />}
+          {...register('email')}
+          error={errors.email?.message}
         />
+
         <Input
-          icon={<RiLockPasswordLine color="black" />}
           type="password"
-          placeholder="Senha"
-          error={error}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          label="Password"
+          icon={<RiLockPasswordLine color="black" />}
+          {...register('password')}
+          error={errors.password?.message}
         />
 
         <div
@@ -81,18 +99,12 @@ const Login = () => {
         <p className="text-sm">
           Não tem uma conta?{' '}
           <button onClick={handleRegister} className="text-[#830FDE]">
-            'Registre-se'
+            Registre-se
           </button>
         </p>
       </div>
 
-      <div
-        className={`flex ${
-          openRegister
-            ? 'hidden md:block w-[408px]'
-            : 'hidden md:block w-[330px]'
-        }`}
-      >
+      <div className="hidden md:flex w-[330px]">
         <img className="rounded-e-md" src="/login.png" />
       </div>
     </form>

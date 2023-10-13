@@ -17,7 +17,7 @@ const postRegister = () => {
   const [load, setLoad] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function register({ username, email, password }: IRegister) {
+  async function registerUser({ username, email, password }: IRegister) {
     try {
       setLoad(true);
       const response = await HTTP.post<IPost>('login/register', {
@@ -37,12 +37,12 @@ const postRegister = () => {
         const errorMessage = error.response?.data as { message: string };
         setError(errorMessage.message);
         setLoad(false);
-        console.log(error);
+        console.log(errorMessage);
       }
     }
   }
 
-  return { register, load, error };
+  return { registerUser, load, error };
 };
 
 export default postRegister;

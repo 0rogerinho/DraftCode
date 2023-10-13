@@ -1,5 +1,6 @@
 import Login from '../components/login/Login';
 import Register from '../components/login/Register';
+//import Register from '../components/login/Register';
 import { UseOpenLogin } from '../context/UseOpenLoginContext';
 
 import UseRegisterContext from '../context/useRegisterContext';
