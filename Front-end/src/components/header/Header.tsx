@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { UseOpenLogin } from '../../context/UseOpenLoginContext';
 import NavMobile from './responsiveness/NavMobile.tsx';
 import Nav from './responsiveness/Nav.tsx';
+import Avatar from './avatar/Avatar.tsx';
 
 const Header = () => {
   const { openLogin, setOpenLogin } = UseOpenLogin();
@@ -18,11 +19,9 @@ const Header = () => {
       <Nav />
 
       <NavMobile />
+
       {token ? (
-        <div>
-          <h1>Bem vindo(a)!</h1>
-          <button onClick={() => localStorage.clear()}>Sair</button>
-        </div>
+        <Avatar />
       ) : (
         <button
           onClick={() => setOpenLogin(!openLogin)}

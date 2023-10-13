@@ -32,9 +32,10 @@ const Input = React.forwardRef<HTMLInputElement, IInputsProps>(
         >
           {icon}
           <input
+            autoComplete="none"
             type={typeT}
             id={inputId}
-            className="ml-3 w-full md:w-64 md:h-12 p-2 bg-white rounded-e-md outline-none text-black "
+            className="ml-3 !w-full md:w-64 md:h-12 p-2 bg-white rounded-e-md outline-none text-black"
             placeholder={label}
             ref={ref}
             {...props}

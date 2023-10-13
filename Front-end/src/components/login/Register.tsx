@@ -1,13 +1,18 @@
 import React from 'react';
+
 import { HiOutlineMail } from 'react-icons/hi';
 import { AiOutlineReload } from 'react-icons/ai';
 import { RiLockPasswordLine } from 'react-icons/ri';
+import { MdOutlineAccountCircle } from 'react-icons/md';
+
 import Input from '../login/Input';
+
 import { UseRegister } from '../../context/useRegisterContext';
 import postRegister from '../../api/postRegister';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import z from 'zod';
+
 import { zodResolver } from '@hookform/resolvers/zod/src/zod.js';
+import { RegisterSchema } from '../validations/RegisterSchema';
 
 type IFormInput = {
   username: string;
@@ -16,30 +21,12 @@ type IFormInput = {
   confirmPassword: string;
 };
 
-const schema = z
-  .object({
-    username: z.string().min(3, 'Deve conter no minimo 3 letras'),
-    email: z.string().email('insira um email valido'),
-    password: z
-      .string()
-      .min(8, { message: 'Deve conter no minimo 8 caracteres' })
-      .regex(
-        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!])/,
-        'Deve conter letra maiuscula e caracter especial',
-      ),
-    confirmPassword: z.string().min(1, 'confirme a senha'),
-  })
-  .refine(({ password, confirmPassword }) => password === confirmPassword, {
-    message: 'A senha não corresponde',
-    path: ['confirmPassword'],
-  });
-
 const Register = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormInput>({ resolver: zodResolver(schema) });
+  } = useForm<IFormInput>({ resolver: zodResolver(RegisterSchema) });
 
   const { registerUser, load, error } = postRegister();
 
@@ -72,7 +59,7 @@ const Register = () => {
         </p>
         <Input
           label="Nome de usuario"
-          icon={<HiOutlineMail color="black" />}
+          icon={<MdOutlineAccountCircle color="black" />}
           error={errors.username?.message}
           {...register('username')}
         />

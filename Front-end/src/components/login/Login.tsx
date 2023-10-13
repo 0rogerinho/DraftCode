@@ -9,27 +9,20 @@ import postLogin from '../../api/postLogin';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LoginSchema } from '../validations/LoginSchemaCreate';
 
 type IFormInput = {
   email: string;
   password: string;
 };
 
-const schema = z.object({
-  email: z.string().email('insira um email valido'),
-  password: z
-    .string()
-    .min(8, { message: 'Deve conter no minimo 8 caracteres' }),
-});
-
 const Login = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormInput>({ resolver: zodResolver(schema) });
+  } = useForm<IFormInput>({ resolver: zodResolver(LoginSchema) });
 
   const { openRegister, setOpenRegister } = UseRegister();
 
@@ -37,7 +30,6 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = async ({ email, password }) =>
     await login({ email, password });
-  console.log(errors);
 
   function handleRegister(event: React.MouseEvent) {
     event.preventDefault();
