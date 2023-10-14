@@ -42,7 +42,7 @@ const Input = React.forwardRef<HTMLInputElement, IInputsProps>(
           />
           {type === 'password' && (
             <div className="cursor-pointer pr-1" onClick={handleClick}>
-              {show ? <TbEyeClosed color="black" /> : <SlEye color="black" />}
+              {show ? <SlEye color="black" /> : <TbEyeClosed color="black" />}
             </div>
           )}
         </label>

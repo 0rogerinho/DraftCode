@@ -11,6 +11,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginSchema } from '../validations/LoginSchemaCreate';
+import { useNavigate } from 'react-router-dom';
 
 type IFormInput = {
   email: string;
@@ -24,12 +25,16 @@ const Login = () => {
     formState: { errors },
   } = useForm<IFormInput>({ resolver: zodResolver(LoginSchema) });
 
+  const navigate = useNavigate();
+
   const { openRegister, setOpenRegister } = UseRegister();
 
   const { login, load, error } = postLogin();
 
-  const onSubmit: SubmitHandler<IFormInput> = async ({ email, password }) =>
+  const onSubmit: SubmitHandler<IFormInput> = async ({ email, password }) => {
     await login({ email, password });
+    navigate(0);
+  };
 
   function handleRegister(event: React.MouseEvent) {
     event.preventDefault();
@@ -40,8 +45,8 @@ const Login = () => {
     <form
       onSubmit={handleSubmit(onSubmit)}
       className={`${
-        openRegister ? 'hidden' : ''
-      }  flex items-center bg-[#101010] rounded-md`}
+        openRegister && 'hidden'
+      } flex items-center bg-[#101010] rounded-md`}
     >
       <div className="p-5 text-center space-y-4">
         <div className="flex justify-center items-center gap-2">
